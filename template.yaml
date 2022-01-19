@@ -16,6 +16,7 @@ Globals:
       Variables:
         COGNITO_USER_POOOL_ID: us-east-1_LqgUs7jcx
         TRACCAR_SECRET_NAME: arn:aws:secretsmanager:us-east-1:959220416326:secret:traccar-yKvx0E
+        DRIVER_USER_TABLE: !Ref driverUser
 
 Resources:
   mainFunction:
@@ -41,3 +42,6 @@ Resources:
             Properties:
               Path: /{proxy+}
               Method: ANY
+  driverUserTable:
+    Type: AWS::Serverless::SimpleTable
+    TableName: driverUser

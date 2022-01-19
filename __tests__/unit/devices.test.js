@@ -5,7 +5,7 @@ const lambda = require('../../src/devices');
 describe('Test devices', function () {
     // This test invokes helloFromLambdaHandler() and compare the result
     it('Verifies successful response', async () => {
-        const result = await lambda.get(2048);
+        const result = await lambda.get({username:'teste8'});
         expect(result).toHaveLength(15);
     })
 })

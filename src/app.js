@@ -26,9 +26,8 @@ app.use(async function(req, res, next) {
 })
 
 app.get('*', (req, resp) => {
-    const AccessToken = req.headers.authorization;
-    console.log(resp.locals.user, AccessToken)
-    resp.json(devices.get(AccessToken.replace('Bearer ','')))
+    console.log(resp.locals.user)
+    resp.json(devices.get(resp.locals.user))
 })
 
 module.exports = app
