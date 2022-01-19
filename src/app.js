@@ -8,7 +8,6 @@ const cognitoExpress = new CognitoExpress({
     tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
 })
 
-
 const app = new express()
 // noinspection JSCheckFunctionSignatures
 app.use(require('cors')())
@@ -31,7 +30,6 @@ app.use(async function(req, res, next) {
         next();
     })
 })
-
 
 app.get('*', (req, resp) => {
     console.log(resp.locals.user)

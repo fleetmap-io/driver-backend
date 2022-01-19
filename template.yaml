@@ -15,6 +15,7 @@ Globals:
     Environment:
       Variables:
         COGNITO_USER_POOOL_ID: us-east-1_LqgUs7jcx
+        TRACCAR_SECRET_NAME: arn:aws:secretsmanager:us-east-1:959220416326:secret:traccar-yKvx0E
 
 Resources:
   mainFunction:
