@@ -5,6 +5,7 @@
     "private": true,
     "dependencies": {
         "@vendia/serverless-express": "^4.5.2",
+        "cognito-express": "^3.0.1",
         "cors": "^2.8.5",
         "express": "^4.17.2"
     },
