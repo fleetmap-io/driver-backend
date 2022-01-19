@@ -1,5 +1,6 @@
 const CognitoExpress = require("cognito-express")
 const express = require('express')
+const devices = require("./devices");
 
 const cognitoExpress = new CognitoExpress({
     region: "us-east-1",
@@ -13,27 +14,21 @@ const app = new express()
 app.use(require('cors')())
 
 app.use(async function(req, res, next) {
+    const accessTokenFromClient = req.headers.authorization
 
-    //I'm passing in the access token in header under key accessToken
-    let accessTokenFromClient = req.headers.authorization;
-
-    //Fail if token not present in header.
     if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header")
 
     await cognitoExpress.validate(accessTokenFromClient.replace('Bearer ',''), function (err, response) {
-
-        //If API is not authenticated, Return 401 with error message.
         if (err) return res.status(401).send(err);
-
-        //Else API has been authenticated. Proceed.
         res.locals.user = response;
         next();
     })
 })
 
 app.get('*', (req, resp) => {
-    console.log(resp.locals.user)
-    resp.json({statusCode: 200})
+    const AccessToken = req.headers.authorization;
+    console.log(resp.locals.user, AccessToken)
+    resp.json(devices.get(AccessToken.replace('Bearer ','')))
 })
 
 module.exports = app
