@@ -34,7 +34,7 @@ app.use(async function(req, res, next) {
 
 
 app.get('*', (req, resp) => {
-    console.log(res.local.user)
+    console.log(resp.local.user)
     resp.json({statusCode: 200})
 })
 
