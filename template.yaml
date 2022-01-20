@@ -15,7 +15,7 @@ Globals:
     Environment:
       Variables:
         COGNITO_USER_POOOL_ID: us-east-1_G39FsYLeT
-        TRACCAR_SECRET_NAME: arn:aws:secretsmanager:us-east-1:903002861645:secret:traccar-zl9ZXR
+        TRACCAR_SECRET_NAME: arn:aws:secretsmanager:us-east-1:903002861645:secret:traccar-external-7SWVYA
         DRIVER_USER_TABLE: !Ref driverUserTable
 
 Resources:
