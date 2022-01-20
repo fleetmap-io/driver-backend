@@ -25,9 +25,9 @@ app.use(async function(req, res, next) {
     })
 })
 
-app.get('*', (req, resp) => {
+app.get('*', async (req, resp) => {
     console.log(resp.locals.user)
-    resp.json(devices.get(resp.locals.user))
+    resp.json(await devices.get(resp.locals.user))
 })
 
 module.exports = app
