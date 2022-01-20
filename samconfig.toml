@@ -3,9 +3,9 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "driver-backend"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1mywpgg6cyhzv"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-18hy9hazjvmg1"
 s3_prefix = "driver-backend"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-profile = "dev"
+profile = "pinme"
