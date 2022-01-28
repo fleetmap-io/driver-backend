@@ -17,15 +17,6 @@ Globals:
         COGNITO_USER_POOOL_ID: us-east-1_G39FsYLeT
         TRACCAR_SECRET_NAME: arn:aws:secretsmanager:us-east-1:903002861645:secret:traccar-external-7SWVYA
         DRIVER_USER_TABLE: !Ref driverUserTable
-  Api:
-    Cors:
-      AllowMethods: "'POST, GET, OPTIONS, PUT, DELETE'"
-      AllowHeaders: "'Content-Type, authorization'"
-      # For example, "'X-Forwarded-For'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers) for more details on the value
-      AllowOrigin: "'*'"
-      # For example, "'www.example.com'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) for more details on this value.
-      MaxAge: "'2'"
-
 
 Resources:
   mainFunction:
