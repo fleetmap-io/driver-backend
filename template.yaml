@@ -48,11 +48,13 @@ Resources:
           Properties:
             Path: /
             Method: ANY
-          ProxyApiGreedy:
-            Type: Api
-            Properties:
-              Path: /{proxy+}
-              Method: ANY
+        ProxyApiGreedy:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
   driverUserTable:
     Type: AWS::Serverless::SimpleTable
     TableName: driverUser
+
+
