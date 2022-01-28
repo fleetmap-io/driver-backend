@@ -1,6 +1,7 @@
 const CognitoExpress = require("cognito-express")
 const express = require('express')
 const devices = require("./devices");
+const cors = require("cors");
 
 const cognitoExpress = new CognitoExpress({
     region: "us-east-1",
@@ -11,7 +12,7 @@ const cognitoExpress = new CognitoExpress({
 
 const app = new express()
 // noinspection JSCheckFunctionSignatures
-app.use(require('cors')())
+app.use(cors())
 
 app.use(async function(req, res, next) {
     const accessTokenFromClient = req.headers.authorization
