@@ -1,5 +1,5 @@
 const odoo = require('./odoo')
-exports.addPhoto = async ({ photoID, photoURL, orderName }) => {
-  const order = await odoo.executeKw(orderName, 'fsm.order', 'search_read', [['name', '=', orderName]])
+exports.addPhoto = async ({ photoID, photoURL, name }) => {
+  const order = await odoo.executeKw(name, 'fsm.order', 'search_read', [['name', '=', name]])
   console.log(order)
 }
