@@ -30,7 +30,7 @@ app.get('*', async (req, resp) => {
     resp.json(await devices.get(resp.locals.user))
 })
 
-app.post('/addPhoto', async (req, res) => {
+app.post('*', async (req, res) => {
     console.log(req.path, req.body)
     res.json({statusCode: 200})
 })
