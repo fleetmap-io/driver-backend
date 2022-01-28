@@ -13,7 +13,7 @@ const cognitoExpress = new CognitoExpress({
 // eslint-disable-next-line new-cap
 const app = new express()
 // noinspection JSCheckFunctionSignatures
-app.use(require('cors'))
+app.use(require('cors')())
 app.use(bodyParser.json())
 
 app.use(async function (req, res, next) {
