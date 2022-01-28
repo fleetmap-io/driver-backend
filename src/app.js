@@ -2,6 +2,7 @@ const CognitoExpress = require('cognito-express')
 const express = require('express')
 const devices = require('./devices')
 const bodyParser = require('body-parser')
+const orders = require('./orders')
 
 const cognitoExpress = new CognitoExpress({
   region: 'us-east-1',
@@ -33,9 +34,9 @@ app.get('*', async (req, resp) => {
   resp.json(await devices.get(resp.locals.user))
 })
 
-app.post('*', async (req, res) => {
+app.post('/addPhoto', async (req, res) => {
   console.log(req.path, req.body)
-  res.json({ statusCode: 200 })
+  res.json(await orders.addPhoto(req.body))
 })
 
 module.exports = app
