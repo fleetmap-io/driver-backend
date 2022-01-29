@@ -9,7 +9,10 @@ async function connect (db) {
   const odoo = new Odoo({ ...config, db, password: config['master-password'] })
   return new Promise((resolve, reject) => {
     odoo.connect((err) => {
-      if (err) { reject(err) }
+      if (err) {
+        console.log('error connection to odoo', err)
+        reject(err)
+      }
       resolve(odoo)
     })
   })
