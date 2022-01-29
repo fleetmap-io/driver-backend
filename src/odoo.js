@@ -6,7 +6,7 @@ const getConfig = async () => { return JSON.parse(await configPromise) }
 
 async function connect (db) {
   const config = await getConfig()
-  const odoo = new Odoo({ ...config, db, password: config['master-password'] })
+  const odoo = new Odoo({ ...config, db })
   return new Promise((resolve, reject) => {
     odoo.connect((err) => {
       if (err) {
