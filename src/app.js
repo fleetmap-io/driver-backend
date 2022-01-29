@@ -35,8 +35,8 @@ app.get('*', async (req, resp) => {
 })
 
 app.post('/addPhoto', async (req, res) => {
-  console.log(req.path, req.body)
-  res.json(await orders.addPhoto(req.body))
+  console.log(req.path, req.body, res.locals.user)
+  res.json(await orders.addPhoto(req.body, res.locals.user))
 })
 
 module.exports = app
