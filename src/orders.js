@@ -8,7 +8,7 @@ exports.getOrder = async (name, user) => {
 }
 
 exports.addPhoto = async ({ photoID, photoURL, name }, user) => {
-  const order = this.getOrder(name, user)
+  const order = await this.getOrder(name, user)
   console.log('order', order)
   const database = users.getOdooDB(user)
   const image = await axios.get(photoURL, { responseType: 'arraybuffer' })
