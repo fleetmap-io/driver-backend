@@ -1,17 +1,14 @@
 const odoo = require('./odoo')
-const users = require('./users')
 const axios = require('axios')
 
-exports.getOrder = async (name, user) => {
-  const database = users.getOdooDB(user)
+exports.getOrder = async (name, database) => {
   const [order] = await odoo.executeKw(database, 'fsm.order', 'search_read', [['name', '=', name]])
   return order
 }
 
-exports.addPhoto = async ({ photoID, photoURL, name }, user) => {
-  const order = await this.getOrder(name, user)
+exports.addPhoto = async ({ photoID, photoURL, name }, database) => {
+  const order = await this.getOrder(name, database)
   console.log('order', order)
-  const database = users.getOdooDB(user)
   const image = await axios.get(photoURL, { responseType: 'arraybuffer' })
     .then(r => Buffer.from(r.data, 'binary').toString('base64'))
   await odoo.executeKw(database,
@@ -26,5 +23,14 @@ exports.addPhoto = async ({ photoID, photoURL, name }, user) => {
       store_fname: 'image.png',
       datas: image
     }]
+  )
+}
+
+exports.updateOrder = async (name, values, database) => {
+  const order = await this.getOrder(name, database)
+  return await odoo.update(database,
+    'fsm.order',
+    [values],
+    order.id
   )
 }
