@@ -30,7 +30,7 @@ exports.updateOrder = async (name, values, database) => {
   const order = await this.getOrder(name, database)
   return await odoo.update(database,
     'fsm.order',
-    [values],
+    values,
     order.id
   )
 }
