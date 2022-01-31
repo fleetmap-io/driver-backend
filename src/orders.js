@@ -4,7 +4,8 @@ const axios = require('axios')
 
 exports.getOrder = async (name, user) => {
   const database = users.getOdooDB(user)
-  return [await odoo.executeKw(database, 'fsm.order', 'search_read', [['name', '=', name]])]
+  const [order] = await odoo.executeKw(database, 'fsm.order', 'search_read', [['name', '=', name]])
+  return order
 }
 
 exports.addPhoto = async ({ photoID, photoURL, name }, user) => {
