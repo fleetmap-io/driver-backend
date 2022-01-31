@@ -28,9 +28,17 @@ exports.addPhoto = async ({ photoID, photoURL, name }, database) => {
 
 exports.updateOrder = async (name, values, database) => {
   const order = await this.getOrder(name, database)
-  return await odoo.update(database,
-    'fsm.order',
-    values,
-    order.id
-  )
+  if (values.stage_id !== 2) {
+    return await odoo.update(database,
+      'fsm.order',
+      values,
+      order.id
+    )
+  } else {
+    console.log('action_complete', database, order.id)
+    return await odoo.actionComplete(database,
+      'fsm.order',
+      order.id
+    )
+  }
 }

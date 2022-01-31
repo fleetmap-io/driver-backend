@@ -41,4 +41,8 @@ exports.read = async (db, model, params) => {
   return this.executeKw(db, model, 'read', params)
 }
 
+exports.actionComplete = async (db, model, id) => {
+  return this.executeKw(db, model, 'action_complete', id)
+}
+
 exports.getConfig = getConfig
