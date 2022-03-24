@@ -17,6 +17,7 @@ Globals:
         COGNITO_USER_POOOL_ID: us-east-1_G39FsYLeT
         TRACCAR_SECRET_NAME: arn:aws:secretsmanager:us-east-1:903002861645:secret:traccar-external-7SWVYA
         DRIVER_USER_TABLE: !Ref driverUserTable
+        DEVICE_TOKENS_TABLE: !Ref deviceTokensTable
 
 Resources:
   mainFunction:
@@ -47,5 +48,8 @@ Resources:
   driverUserTable:
     Type: AWS::Serverless::SimpleTable
     TableName: driverUser
+  deviceTokensTable:
+    Type: AWS::Serverless::SimpleTable
+    TableName: deviceTokens
 
 
