@@ -25,7 +25,7 @@ exports.get = async (token, user) => {
   const permission = { deviceId: device.id, attributeId: 37 }
   const computed = await axios.get(`${auth.basePath}/attributes/computed/${device.id}`, { auth }).then(d => d.data)
   if (!computed.find(a => a.id === 37)) {
-    await axios.post(`${auth.basePath}/permissions`, permission, { auth }).then(d => d.data)
+    await axios.post(`${auth.basePath}/permissions`, permission, { auth })
   }
   return device
 }
