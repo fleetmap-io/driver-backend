@@ -7,6 +7,7 @@ const dynamo = new DynamoDBClient({ region: 'us-east-1' })
 const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 
 exports.get = async (token, user) => {
+  console.log('get', token, user)
   const ddevice = await dynamo.send(new ScanCommand({
     TableName: process.env.DEVICES_TABLE,
     FilterExpression: '#token = :token',
