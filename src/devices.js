@@ -27,4 +27,5 @@ exports.get = async (token, user) => {
   if (!computed.find(a => a.id === 37)) {
     await axios.post(`${auth.basePath}/permissions`, permission, { auth }).then(d => d.data)
   }
+  return device
 }
