@@ -17,8 +17,9 @@ exports.get = async (token, user) => {
   const d = unmarshall(ddevice.Items[0])
   console.log('device', d)
   const auth = await _secret
-  const axios = require('axios').create({ auth, baseURL: auth.basePath })
-  const [device] = await axios.get(`devices?id=${d.deviceId}`).then(d => d.data)
+  const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
+  console.log(auth)
+  const [device] = await axios.get(`/devices?id=${d.deviceId}`).then(d => d.data)
   console.log(device)
   device.attributes.driverUniqueId = user.username
   await axios.put(`devices/${device.id}`, device)
