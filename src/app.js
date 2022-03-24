@@ -41,6 +41,7 @@ app.post('/addPhoto', async (req, res) => {
 })
 
 app.get('*', async (req, resp) => {
+  console.log(req)
   resp.json(await devices.get(req.query.token))
 })
 
