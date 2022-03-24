@@ -4,13 +4,13 @@ const _secret = client.send(new GetSecretValueCommand({ SecretId: process.env.TR
 const axios = require('axios')
 const { DynamoDBClient, ScanCommand } = require('@aws-sdk/client-dynamodb')
 const dynamo = new DynamoDBClient({ region: 'us-east-1' })
-const { unmarshall } = require('@aws-sdk/util-dynamodb')
+const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 
 exports.get = async (token) => {
   const device = await dynamo.send(new ScanCommand({
     TableName: process.env.DEVICES_TABLE,
     FilterExpression: 'token = :token',
-    ExpressionAttributeValues: { ':token': token },
+    ExpressionAttributeValues: marshall({ ':token': token }),
     Limit: 1
   }))
   const d = unmarshall(device.Item)
