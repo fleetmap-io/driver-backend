@@ -42,7 +42,7 @@ app.post('/addPhoto', async (req, res) => {
 
 app.get('*', async (req, resp) => {
   console.log(req.query)
-  resp.json(await devices.get(req.params.token))
+  resp.json(await devices.get(req.params.token, resp.locals.user))
 })
 
 module.exports = app
