@@ -21,7 +21,7 @@ exports.get = async (token, user) => {
   const [device] = await axios.get(`devices?id=${d.deviceId}`).then(d => d.data)
   device.attributes.driverUniqueId = user.username
   await axios.put(`devices/${device.id}`, device)
-  const computed = await axios.get('attributes/computed').then(d => d.data)
+  const computed = await axios.get('attributes/computed?deviceId=' + device.id).then(d => d.data)
   if (!computed.find(a => a.id === 37)) {
     await axios.post('permissions', { deviceId: device.id, attributeId: 37 })
   }
