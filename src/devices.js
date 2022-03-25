@@ -18,12 +18,10 @@ exports.get = async (token, user) => {
   console.log('device', d)
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-  console.log(auth)
-  const [device] = await axios.get(`/devices?id=${d.deviceId}`).then(d => d.data)
-  console.log(device)
+  const [device] = await axios.get(`devices?id=${d.deviceId}`).then(d => d.data)
   device.attributes.driverUniqueId = user.username
   await axios.put(`devices/${device.id}`, device)
-  const computed = await axios.get(`attributes/computed/${device.id}`).then(d => d.data)
+  const computed = await axios.get('attributes/computed').then(d => d.data)
   if (!computed.find(a => a.id === 37)) {
     await axios.post('permissions', { deviceId: device.id, attributeId: 37 })
   }
