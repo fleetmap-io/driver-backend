@@ -7,14 +7,14 @@ const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 
 exports.get = async (token, user) => {
   console.log('get', token, user)
-  const ddevice = await dynamo.send(new ScanCommand({
+  const dDevice = await dynamo.send(new ScanCommand({
     TableName: process.env.DEVICES_TABLE,
     FilterExpression: '#token = :token',
     ExpressionAttributeValues: marshall({ ':token': token }),
     ExpressionAttributeNames: { '#token': 'token' }
   }))
-  console.log(ddevice)
-  const d = unmarshall(ddevice.Items[0])
+  console.log(dDevice)
+  const d = unmarshall(dDevice.Items[0])
   console.log('device', d)
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
