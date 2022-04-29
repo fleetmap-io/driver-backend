@@ -4,7 +4,6 @@ const devices = require('./devices')
 const bodyParser = require('body-parser')
 const orders = require('./orders')
 const users = require('./users')
-const uniqueId = require("./uniqueId");
 
 const cognitoExpress = new CognitoExpress({
   region: 'us-east-1',
@@ -39,22 +38,6 @@ app.post('/orders/:orderName', async (req, resp) => {
 
 app.post('/addPhoto', async (req, res) => {
   res.json(await orders.addPhoto(req.body, users.getOdooDB(res.locals.user)))
-})
-
-app.get('/uniqueId/:driverId', async (req, res) => {
-  res.json(await uniqueId.get(req.params.driverId))
-})
-
-app.post('/uniqueId/add', async (req, res) => {
-  res.json(await uniqueId.add(req.body))
-})
-
-app.post('/uniqueId/update', async (req, res) => {
-  res.json(await uniqueId.update(req.body))
-})
-
-app.delete('/uniqueId/:id', async (req, res) => {
-  res.json(await uniqueId.delete(req.params.id))
 })
 
 app.get('*', async (req, resp) => {
