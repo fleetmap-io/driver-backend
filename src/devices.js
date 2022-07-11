@@ -10,7 +10,7 @@ exports.get = async (token, user) => {
   const dDevice = await dynamo.send(new ScanCommand({
     TableName: process.env.DEVICES_TABLE,
     FilterExpression: '#token = :token',
-    ExpressionAttributeValues: marshall({ ':token': token }),
+    ExpressionAttributeValues: marshall({ ':token': token }, { removeUndefinedValues: true }),
     ExpressionAttributeNames: { '#token': 'token' }
   }))
   console.log(dDevice)
