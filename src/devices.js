@@ -9,7 +9,7 @@ const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb')
 exports.get = async ({ username }) => {
   let user = await dynamo.send(new GetItemCommand({
     TableName: process.env.DRIVER_USER_TABLE,
-    Key: marshall({ id: username })
+    Key: marshall({ id: username }, { removeUndefinedValues: true })
   }))
   user = unmarshall(user.Item)
   const secret = await _secret
