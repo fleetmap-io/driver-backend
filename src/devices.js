@@ -30,6 +30,7 @@ exports.get = async (token, user, deviceId) => {
     if (!computed.find(a => a.id === 37)) {
       await axios.post('permissions', { deviceId: device.id, attributeId: 37 })
     }
+    await axios.post('commands/send', { deviceId, type: 'custom', attributes: { data: 'setparam 11700:0' }, description: 'driver backend' })
     return device
   } else {
     console.log('getting', user.username)
