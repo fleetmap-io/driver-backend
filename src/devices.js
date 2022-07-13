@@ -39,6 +39,14 @@ exports.get = async (token, user, deviceId) => {
     }))
     user = unmarshall(_user.Item)
     const secret = await _secret
-    return await axios.get(`${secret.basePath}/devices?userId=${user.parentUserId}`, { auth: secret }).then(d => d.data)
+    return await axios.get(`${secret.basePath}/devices?userId=${user.parentUserId}`, { auth: secret }).then(d => d.data.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1
+      }
+      if (a.name < b.name) {
+        return -1
+      }
+      return 0
+    }))
   }
 }
