@@ -6,7 +6,7 @@ const dynamo = new DynamoDBClient({ region: 'us-east-1' })
 const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 const axios = require('axios')
 
-exports.get = async (token, user) => {
+exports.get = async (token, user, deviceId) => {
   console.log('get', token, user)
   if (token) {
     const dDevice = await dynamo.send(new ScanCommand({
@@ -18,9 +18,11 @@ exports.get = async (token, user) => {
     console.log(dDevice)
     const d = unmarshall(dDevice.Items[0])
     console.log('device', d)
+    deviceId = d.deviceId
+
     const auth = await _secret
     const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-    const [device] = await axios.get(`devices?id=${d.deviceId}`).then(d => d.data)
+    const [device] = await axios.get(`devices?id=${deviceId}`).then(d => d.data)
     device.attributes.driverUniqueId = user.username
     await axios.put(`devices/${device.id}`, device)
     const computed = await axios.get('attributes/computed?deviceId=' + device.id).then(d => d.data)
