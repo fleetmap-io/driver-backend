@@ -19,7 +19,8 @@ exports.get = async (token, user, deviceId) => {
     const d = unmarshall(dDevice.Items[0])
     console.log('device', d)
     deviceId = d.deviceId
-
+  }
+  if (token || deviceId) {
     const auth = await _secret
     const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
     const [device] = await axios.get(`devices?id=${deviceId}`).then(d => d.data)
