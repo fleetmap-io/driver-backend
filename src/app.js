@@ -45,4 +45,8 @@ app.get('*', async (req, resp) => {
   resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
 })
 
+app.post('/immobilize', async (req, res) => {
+  res.json(await devices.immobilize(req.body, res.locals.user))
+})
+
 module.exports = app

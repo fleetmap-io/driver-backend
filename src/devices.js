@@ -51,3 +51,7 @@ exports.get = async (token, user, deviceId) => {
     }))
   }
 }
+
+exports.immobilize = async (device, user) => {
+  console.log('immobilize', device, user)
+}
