@@ -49,4 +49,8 @@ app.post('/immobilize', async (req, res) => {
   res.json(await devices.immobilize(req.body, res.locals.user))
 })
 
+app.post('/mobilize', async (req, res) => {
+  res.json(await devices.mobilize(req.body, res.locals.user))
+})
+
 module.exports = app
