@@ -53,5 +53,7 @@ exports.get = async (token, user, deviceId) => {
 }
 
 exports.immobilize = async (device, user) => {
-  console.log('immobilize', device, user)
+  const auth = await _secret
+  const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
+  await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setdigout 1' }, description: 'driver backend' })
 }
