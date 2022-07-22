@@ -46,11 +46,15 @@ app.get('*', async (req, resp) => {
 })
 
 app.post('/immobilize', async (req, res) => {
-  res.json(await devices.immobilize(req.body, res.locals.user))
+  res.json(await devices.immobilize(req.body))
 })
 
 app.post('/mobilize', async (req, res) => {
-  res.json(await devices.mobilize(req.body, res.locals.user))
+  res.json(await devices.mobilize(req.body))
+})
+
+app.post('/startTrip', async (req, res) => {
+  res.json(await devices.startTrip(req.body))
 })
 
 module.exports = app
