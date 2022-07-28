@@ -68,3 +68,14 @@ exports.startTrip = async (device) => {
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setparam 11700:0' }, description: 'driver backend' })
 }
+
+exports.endTrip = async (device) => {
+  const auth = await _secret
+  const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
+  const d = await axios.get('devices/' + device.id)
+  if (d.attributes.driverUniqueId) {
+    console.log('Logout driver', d.id, d.attributes.driverUniqueId)
+    delete d.attributes.driverUniqueId
+    await axios.put('devices/' + device.id, d)
+  }
+}
