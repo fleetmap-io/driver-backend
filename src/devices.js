@@ -72,7 +72,7 @@ exports.startTrip = async (device) => {
 exports.endTrip = async (item) => {
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-  const [device] = await axios.get('devices/' + item.id).then(d => d.data)
+  const [device] = await axios.get('devices?id=' + item.id).then(d => d.data)
   if (device.attributes.driverUniqueId) {
     console.log('Logout driver', device.id, device.attributes.driverUniqueId)
     delete d.attributes.driverUniqueId
