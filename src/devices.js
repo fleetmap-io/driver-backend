@@ -75,7 +75,7 @@ exports.endTrip = async (item) => {
   const [device] = await axios.get('devices?id=' + item.id).then(d => d.data)
   if (device.attributes.driverUniqueId) {
     console.log('Logout driver', device.id, device.attributes.driverUniqueId)
-    delete d.attributes.driverUniqueId
+    delete device.attributes.driverUniqueId
     await axios.put('devices/' + device.id, device)
   }
 }
