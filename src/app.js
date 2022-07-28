@@ -57,4 +57,8 @@ app.post('/startTrip', async (req, res) => {
   res.json(await devices.startTrip(req.body))
 })
 
+app.post('/endTrip', async (req, res) => {
+  res.json(await devices.endTrip(req.body))
+})
+
 module.exports = app
