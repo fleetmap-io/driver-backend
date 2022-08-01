@@ -78,4 +78,5 @@ exports.endTrip = async (item) => {
     delete device.attributes.driverUniqueId
     await axios.put('devices/' + device.id, device)
   }
+  await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setparam 11700:1' }, description: 'driver backend' })
 }
