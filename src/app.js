@@ -40,7 +40,11 @@ app.post('/addPhoto', async (req, res) => {
   res.json(await orders.addPhoto(req.body, users.getOdooDB(res.locals.user)))
 })
 
-app.get('*', async (req, resp) => {
+app.get('/user', async (req, resp) => {
+  resp.json(await devices.getUser(resp.locals.user))
+})
+
+app.get('/', async (req, resp) => {
   console.log(req.query)
   resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
 })

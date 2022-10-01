@@ -6,6 +6,17 @@ const dynamo = new DynamoDBClient({ region: 'us-east-1' })
 const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 const axios = require('axios')
 
+exports.getUser = async (user) => {
+  console.log('getting', user.username)
+  const _user = await dynamo.send(new GetItemCommand({
+    TableName: process.env.DRIVER_USER_TABLE,
+    Key: marshall({ id: user.username })
+  }))
+  user = unmarshall(_user.Item)
+  const secret = await _secret
+  return axios.get(`${secret.basePath}/users?userId=${user.parentUserId}`, { auth: secret }).then(d => d.data)
+}
+
 exports.get = async (token, user, deviceId) => {
   console.log('get', token, user)
   if (token) {
