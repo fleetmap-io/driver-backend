@@ -6,7 +6,7 @@ const dynamo = new DynamoDBClient({ region: 'us-east-1' })
 const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 const axios = require('axios')
 
-exports.getUser = async (user) => {
+exports.getUsers = async (user) => {
   console.log('getting', user.username)
   const _user = await dynamo.send(new GetItemCommand({
     TableName: process.env.DRIVER_USER_TABLE,
