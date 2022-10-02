@@ -14,7 +14,9 @@ exports.getUsers = async (user) => {
   }))
   user = unmarshall(_user.Item)
   const secret = await _secret
-  return axios.get(`${secret.basePath}/users?userId=${user.parentUserId}`, { auth: secret }).then(d => d.data)
+  const users = await axios.get(`${secret.basePath}/users?userId=${user.parentUserId}`, { auth: secret }).then(d => d.data)
+  users.push(await axios.get(`${secret.basePath}/users/${user.parentUserId}`, { auth: secret }).then(d => d.data))
+  return users
 }
 
 exports.get = async (token, user, deviceId) => {
