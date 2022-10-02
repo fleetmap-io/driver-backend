@@ -81,7 +81,7 @@ async function checkOut1 (axios, deviceId, resolve) {
   console.log('checking', device.name)
   const [position] = await axios.get('positions?id=' + device.positionId).then(d => d.data)
   console.log('checking', position.fixTime, position.attributes)
-  if (position.attributes.out1) { resolve() } else { setTimeout(checkOut1, 2000, deviceId, resolve) }
+  if (position.attributes.out1) { resolve() } else { setTimeout(checkOut1, 2000, axios, deviceId, resolve) }
 }
 
 exports.startTrip = async (device) => {
