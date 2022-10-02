@@ -76,13 +76,12 @@ exports.mobilize = async (device) => {
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setdigout 0' }, description: 'driver backend' })
 }
 
-async function checkOut1(deviceId, resolve) {
+async function checkOut1 (axios, deviceId, resolve) {
   const [device] = await axios.get('devices?id=' + deviceId).then(d => d.data)
   console.log('checking', device.name)
-  let [position] = await axios.get('positions?id=' + device.positionId).then(d => d.data)
+  const [position] = await axios.get('positions?id=' + device.positionId).then(d => d.data)
   console.log('checking', position.fixTime, position.attributes)
-  if (position.attributes.out1) {resolve()}
-  else {setTimeout(checkOut1, 2000, deviceId, resolve)}
+  if (position.attributes.out1) { resolve() } else { setTimeout(checkOut1, 2000, deviceId, resolve) }
 }
 
 exports.startTrip = async (device) => {
@@ -91,7 +90,7 @@ exports.startTrip = async (device) => {
   const data = 'setparam 11700:0'
   console.log('deviceId', device.id, 'sending', data)
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data }, description: 'driver backend' })
-  await new Promise((resolve) => checkOut1(device.id, resolve))
+  await new Promise((resolve) => checkOut1(axios, device.id, resolve))
 }
 
 exports.endTrip = async (item) => {
