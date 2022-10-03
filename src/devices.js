@@ -83,12 +83,20 @@ exports.positions = async (positionId) => {
   return await axios.get('positions?id=' + positionId).then(d => d.data)
 }
 
+async function sendSms (phone, message) {
+  return axios.get(
+      `https://api.pinme.io/gateway/?token=uCQ3HxR5d87gvSRIPcjm&msisdn=${phone}&message=${encodeURIComponent(message)}`
+  ).then(d => d.data)
+}
+
 exports.startTrip = async (device) => {
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
   const data = 'setparam 11700:0'
   console.log('deviceId', device.id, 'sending', data)
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data }, description: 'driver backend' })
+  await sendSms(device.phone, '  ' + data)
+  await sendSms(device.phone, '  getrecord')
 }
 
 exports.endTrip = async (item) => {
