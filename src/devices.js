@@ -78,6 +78,8 @@ exports.mobilize = async (device) => {
 
 exports.positions = async (positionId) => {
   console.log('checking', positionId)
+  const auth = await _secret
+  const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
   return await axios.get('positions?id=' + positionId).then(d => d.data)
 }
 
