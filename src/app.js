@@ -49,6 +49,11 @@ app.get('/', async (req, resp) => {
   resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
 })
 
+app.get('/positions', async (req, resp) => {
+  console.log(req.query)
+  resp.json(await devices.positions(req.body))
+})
+
 app.post('/immobilize', async (req, res) => {
   res.json(await devices.immobilize(req.body))
 })
