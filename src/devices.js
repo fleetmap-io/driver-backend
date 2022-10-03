@@ -76,9 +76,9 @@ exports.mobilize = async (device) => {
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setdigout 0' }, description: 'driver backend' })
 }
 
-exports.positions = async (device) => {
-  console.log('checking', device.name)
-  return await axios.get('positions?id=' + device.positionId).then(d => d.data)
+exports.positions = async (positionId) => {
+  console.log('checking', positionId)
+  return await axios.get('positions?id=' + positionId).then(d => d.data)
 }
 
 exports.startTrip = async (device) => {

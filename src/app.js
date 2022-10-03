@@ -51,7 +51,7 @@ app.get('/', async (req, resp) => {
 
 app.get('/positions', async (req, resp) => {
   console.log(req.query)
-  resp.json(await devices.positions(req.body))
+  resp.json(await devices.positions(req.query.id))
 })
 
 app.post('/immobilize', async (req, res) => {
