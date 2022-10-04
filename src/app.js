@@ -13,7 +13,7 @@ const app = new express()
 app.use(require('cors')())
 app.use(bodyParser.json())
 
-async function cogValidateToken (token, retryCounter = 0) {
+async function cogValidateToken (token, callback, retryCounter = 0) {
   console.log('cogValidateToken', token)
   if (!cognitoExpress) {
     cognitoExpress = new CognitoExpress({
@@ -25,12 +25,12 @@ async function cogValidateToken (token, retryCounter = 0) {
   }
 
   try {
-    return await cognitoExpress.validate(token)
+    return await cognitoExpress.validate(token, callback)
   } catch (e) {
     if ((retryCounter < 25) && String(e.message).startsWith('Unable to generate certificate due to')) {
       console.error(e)
       cognitoExpress = null
-      return cogValidateToken(token, retryCounter + 1)
+      return cogValidateToken(token, callback, retryCounter + 1)
     }
     throw e
   }
