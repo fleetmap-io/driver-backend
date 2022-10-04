@@ -14,6 +14,7 @@ app.use(require('cors')())
 app.use(bodyParser.json())
 
 async function cogValidateToken (token, retryCounter = 0) {
+  console.log('cogValidateToken', token)
   if (!cognitoExpress) {
     cognitoExpress = new CognitoExpress({
       region: 'us-east-1',
