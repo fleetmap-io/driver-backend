@@ -5,12 +5,7 @@ const bodyParser = require('body-parser')
 const orders = require('./orders')
 const users = require('./users')
 
-const cognitoExpress = new CognitoExpress({
-  region: 'us-east-1',
-  cognitoUserPoolId: process.env.COGNITO_USER_POOOL_ID,
-  tokenUse: 'access', // Possible Values: access | id
-  tokenExpiration: 3600000 // Up to default expiration of 1 hour (3600000 ms)
-})
+let cognitoExpress
 
 // eslint-disable-next-line new-cap
 const app = new express()
@@ -18,10 +13,32 @@ const app = new express()
 app.use(require('cors')())
 app.use(bodyParser.json())
 
+async function cogValidateToken (token, retryCounter = 0) {
+  if (!cognitoExpress) {
+    cognitoExpress = new CognitoExpress({
+      region: 'us-east-1',
+      cognitoUserPoolId: process.env.COGNITO_USER_POOOL_ID,
+      tokenUse: 'access', // Possible Values: access | id
+      tokenExpiration: 3600000 // Up to default expiration of 1 hour (3600000 ms)
+    })
+  }
+
+  try {
+    return await cognitoExpress.validate(token)
+  } catch (e) {
+    if ((retryCounter < 25) && String(e.message).startsWith('Unable to generate certificate due to')) {
+      console.error(e)
+      cognitoExpress = null
+      return cogValidateToken(token, retryCounter + 1)
+    }
+    throw e
+  }
+}
+
 app.use(async function (req, res, next) {
   const accessTokenFromClient = req.headers.authorization
   if (!accessTokenFromClient) return res.status(401).send('Access Token missing from header')
-  await cognitoExpress.validate(accessTokenFromClient.replace('Bearer ', ''), function (err, response) {
+  await cogValidateToken(accessTokenFromClient.replace('Bearer ', ''), function (err, response) {
     if (err) return res.status(401).send(err)
     res.locals.user = response
     next()
