@@ -91,4 +91,8 @@ app.post('/endTrip', async (req, res) => {
   res.json(await devices.endTrip(req.body))
 })
 
+app.post('/messages', async (req, res) => {
+  res.json(await require('./messages').post(req.body))
+})
+
 module.exports = app
