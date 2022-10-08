@@ -7,7 +7,6 @@ const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 const axios = require('axios')
 
 exports.getUsers = async (user) => {
-  console.log('getting', user.username)
   const _user = await dynamo.send(new GetItemCommand({
     TableName: process.env.DRIVER_USER_TABLE,
     Key: marshall({ id: user.username })
@@ -44,7 +43,6 @@ exports.get = async (token, user, deviceId) => {
     }
     return device
   } else {
-    console.log('getting', user.username)
     const _user = await dynamo.send(new GetItemCommand({
       TableName: process.env.DRIVER_USER_TABLE,
       Key: marshall({ id: user.username })
