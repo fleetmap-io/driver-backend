@@ -37,16 +37,20 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
 }
 
 app.use(async function (req, res, next) {
-  const accessTokenFromClient = req.headers.authorization
-  if (!accessTokenFromClient) {
-    console.log(req.path, 'no auth returning 401')
-    return res.status(401).send('Access Token missing from header')
-  }
-  await cogValidateToken(accessTokenFromClient.replace('Bearer ', ''), function (err, response) {
-    if (err) return res.status(401).send(err)
-    res.locals.user = response
+  if (req.path === '/messages') {
     next()
-  })
+  } else {
+    const accessTokenFromClient = req.headers.authorization
+    if (!accessTokenFromClient) {
+      console.log(req.path, 'no auth returning 401')
+      return res.status(401).send('Access Token missing from header')
+    }
+    await cogValidateToken(accessTokenFromClient.replace('Bearer ', ''), function (err, response) {
+      if (err) return res.status(401).send(err)
+      res.locals.user = response
+      next()
+    })
+  }
 })
 
 app.get('/orders/:orderId', async (req, resp) => {
