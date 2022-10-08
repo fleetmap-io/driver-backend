@@ -14,7 +14,6 @@ app.use(require('cors')())
 app.use(bodyParser.json())
 
 async function cogValidateToken (token, callback, retryCounter = 0) {
-  console.log('cogValidateToken', token)
   if (!cognitoExpress) {
     cognitoExpress = new CognitoExpress({
       region: 'us-east-1',
@@ -70,13 +69,11 @@ app.get('/users', async (req, resp) => {
 })
 
 app.get('/', async (req, resp) => {
-  console.log(req.query)
   resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
 })
 
 app.get('/positions', async (req, resp) => {
-  console.log(req.query)
-  resp.json(await devices.positions(req.query.id))
+  resp.json(await devices.positions(req.query.id, resp.locals.user))
 })
 
 app.post('/immobilize', async (req, res) => {
