@@ -93,7 +93,7 @@ app.post('/endTrip', async (req, res) => {
 })
 
 app.post('/messages', async (req, res) => {
-  res.json(await require('./messages').post(req.body))
+  await require('./messages').post(req, res)
 })
 
 module.exports = app
