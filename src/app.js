@@ -70,7 +70,12 @@ app.get('/users', async (req, resp) => {
 })
 
 app.get('/', async (req, resp) => {
-  resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
+  try {
+    resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
+  } catch (e) {
+    console.error(e.message, e.response && e.response.data)
+    resp.status(500).send(e.message)
+  }
 })
 
 app.get('/devices', async (req, resp) => {
