@@ -36,6 +36,7 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
 }
 
 app.use(async function (req, res, next) {
+  console.log(req.method, req.path)
   if (req.path === '/messages') {
     next()
   } else {
