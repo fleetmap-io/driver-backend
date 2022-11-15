@@ -5,6 +5,7 @@ const { DynamoDBClient, ScanCommand, GetItemCommand } = require('@aws-sdk/client
 const dynamo = new DynamoDBClient({ region: 'us-east-1' })
 const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 const axios = require('axios')
+const traccar = require('./traccar')
 
 exports.getUsers = async (user) => {
   const _user = await dynamo.send(new GetItemCommand({
@@ -58,6 +59,18 @@ exports.get = async (token, user, deviceId) => {
       }
       return 0
     }))
+  }
+}
+const getUser = (id) => dynamo.send(new GetItemCommand({
+  TableName: process.env.DRIVER_USER_TABLE,
+  Key: marshall({ id })
+})).then(u => unmarshall(u.Item))
+
+exports.getDevicesAndPositions = async (user) => {
+  const _user = await getUser(user.username)
+  const devices = await traccar.devices(_user.parentUserId)
+  for (const d of devices) {
+    d.position = await traccar.position(d.positionId, d.id)
   }
 }
 
