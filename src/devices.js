@@ -72,6 +72,7 @@ exports.getDevicesAndPositions = async (user) => {
   for (const d of devices) {
     d.position = await traccar.position(d.positionId, d.id)
   }
+  return devices
 }
 
 exports.immobilize = async (device) => {
