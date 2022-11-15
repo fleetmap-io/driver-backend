@@ -69,7 +69,7 @@ const getUser = (id) => dynamo.send(new GetItemCommand({
 exports.getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
   const devices = await traccar.devices(_user.parentUserId)
-  await Promise.all(devices.map(async d => { d.position = await traccar.position(d.positionId, d.id) }))
+  await Promise.all(devices.map(async d => { [d.position] = await traccar.position(d.positionId, d.id) }))
   return devices
 }
 
