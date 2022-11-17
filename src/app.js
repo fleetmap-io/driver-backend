@@ -4,6 +4,8 @@ const devices = require('./devices')
 const bodyParser = require('body-parser')
 const orders = require('./orders')
 const users = require('./users')
+const parser = require('ua-parser-js')
+const axios = require('axios')
 
 let cognitoExpress
 
@@ -12,6 +14,10 @@ const app = new express()
 // noinspection JSCheckFunctionSignatures
 app.use(require('cors')())
 app.use(bodyParser.json())
+
+async function logTokenError (req, message) {
+  console.error(message, { ...parser(req.headers['user-agent']), ...(await getCity(req.headers['x-forwarded-for'].split(',')[0])) })
+}
 
 async function cogValidateToken (token, callback, retryCounter = 0) {
   if (!cognitoExpress) {
@@ -35,6 +41,10 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
   }
 }
 
+function getCity (ip) {
+  return axios.get(`https://ipinfo.io/${ip}?token=${process.env.IPINFO_TOKEN}`).then(d => d.data)
+}
+
 app.use(async function (req, res, next) {
   console.log(req.method, req.path)
   if (req.path === '/messages') {
@@ -42,11 +52,14 @@ app.use(async function (req, res, next) {
   } else {
     const accessTokenFromClient = req.headers.authorization
     if (!accessTokenFromClient) {
-      console.log(req.path, 'no auth returning 401')
+      await logTokenError('Access Token missing from header', req)
       return res.status(401).send('Access Token missing from header')
     }
     await cogValidateToken(accessTokenFromClient.replace('Bearer ', ''), function (err, response) {
-      if (err) return res.status(401).send(err)
+      if (err) {
+        logTokenError(err.message, req).then()
+        return res.status(401).send(err)
+      }
       res.locals.user = response
       next()
     })
