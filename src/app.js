@@ -15,7 +15,7 @@ const app = new express()
 app.use(require('cors')())
 app.use(bodyParser.json())
 
-async function logTokenError (req, message) {
+async function logTokenError (message, req) {
   console.error(message, { ...parser(req.headers['user-agent']), ...(await getCity(req.headers['x-forwarded-for'].split(',')[0])) })
 }
 
