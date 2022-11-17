@@ -57,11 +57,11 @@ app.use(async function (req, res, next) {
     }
     await cogValidateToken(accessTokenFromClient.replace('Bearer ', ''), function (err, response) {
       if (err) {
-        logTokenError(err.message, req).then()
-        return res.status(401).send(err)
+        logTokenError(err.message, req).then(() => res.status(401).send(err))
+      } else {
+        res.locals.user = response
+        next()
       }
-      res.locals.user = response
-      next()
     })
   }
 })
