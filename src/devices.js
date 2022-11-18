@@ -89,7 +89,7 @@ exports.positions = async (positionId, user) => {
   console.log(user && user.username, 'checking position id', positionId)
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-  return await axios.get('positions?id=' + positionId).then(d => d.data)
+  return axios.get('positions?id=' + positionId).then(d => d.data)
 }
 
 async function sendSms (phone, message) {

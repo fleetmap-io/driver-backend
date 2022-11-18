@@ -96,7 +96,12 @@ app.get('/devices', async (req, resp) => {
 })
 
 app.get('/positions', async (req, resp) => {
-  resp.json(await devices.positions(req.query.id, resp.locals.user))
+  try {
+    resp.json(await devices.positions(req.query.id, resp.locals.user))
+  } catch (e) {
+    console.error(e.message, e.response && e.response.data)
+    resp.status(500).send(e.message)
+  }
 })
 
 app.post('/immobilize', async (req, res) => {
