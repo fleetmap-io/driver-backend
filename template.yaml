@@ -31,6 +31,11 @@ Resources:
       MemorySize: 128
       Timeout: 100
       Description: A Lambda function that returns a static string.
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0218b58a60630dbf6
+        SubnetIds:
+          - subnet-033c1b8736acb59f9
       Policies:
         - AWSLambdaBasicExecutionRole
         - SecretsManagerReadWrite
