@@ -8,9 +8,9 @@ exports.devices = async (userId) => {
   return traccar.get(`/devices?userId=${userId}`).then(d => d.data)
 }
 
-exports.position = async (positionId, deviceId) => {
+exports.positions = async (positionIds) => {
   const traccar = await getTraccar()
-  return traccar.get(`/positions?id=${positionId}&deviceId=${deviceId}`).then(d => d.data)
+  return traccar.get('/positions?' + positionIds.map(p => `id=${p}`).join('&')).then(d => d.data)
 }
 
 function getTraccar () {
