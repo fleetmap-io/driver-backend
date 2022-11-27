@@ -91,9 +91,7 @@ app.get('/', async (req, resp) => {
   }
 })
 
-app.get('/devices', async (req, resp) => {
-  resp.json(await devices.getDevicesAndPositions(resp.locals.user))
-})
+app.get('/devices', devices.devicesGet)
 
 app.get('/positions', async (req, resp) => {
   try {

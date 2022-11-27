@@ -66,12 +66,22 @@ const getUser = (id) => dynamo.send(new GetItemCommand({
   Key: marshall({ id })
 })).then(u => unmarshall(u.Item))
 
-exports.getDevicesAndPositions = async (user) => {
+const getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
-  const devices = await traccar.devices(_user.parentUserId)
-  const positions = await traccar.positions(devices.map(d => d.positionId))
+  const cookie = await traccar.getUserCookie(_user.parentUserId)
+  const devices = await traccar.devices(cookie)
+  const positions = await traccar.positions(cookie)
   devices.forEach(d => { d.position = positions.find(p => p.deviceId === d.id) })
   return devices
+}
+
+exports.devicesGet = async (req, resp) => {
+  try {
+    resp.json(await getDevicesAndPositions(resp.locals.user))
+  } catch (e) {
+    console.error(e)
+    resp.status(500).send(e.message)
+  }
 }
 
 exports.immobilize = async (device) => {

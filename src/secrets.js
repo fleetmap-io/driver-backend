@@ -6,3 +6,9 @@ exports.getSecret = async (secretName) => {
   const { SecretString } = await client.send(command)
   return SecretString
 }
+
+exports.getSecretObject = async (secretName) => {
+  const command = new GetSecretValueCommand({ SecretId: secretName })
+  const { SecretString } = await client.send(command)
+  return JSON.parse(SecretString)
+}

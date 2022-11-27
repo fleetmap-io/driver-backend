@@ -9,12 +9,15 @@
         "@aws-sdk/util-dynamodb": "^3.47.0",
         "@vendia/serverless-express": "^4.5.2",
         "axios": "^0.25.0",
+        "axios-cookiejar-support": "^4.0.3",
         "body-parser": "^1.19.1",
         "cognito-express": "^3.0.1",
         "cors": "^2.8.5",
         "express": "^4.17.2",
         "firebase-admin": "^11.1.0",
+        "mysql2": "^2.3.3",
         "odoo-xmlrpc": "^1.0.8",
+        "tough-cookie": "^4.1.2",
         "ua-parser-js": "^1.0.32"
     },
     "devDependencies": {
