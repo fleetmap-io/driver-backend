@@ -70,7 +70,7 @@ exports.getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
   const devices = await traccar.devices(_user.parentUserId)
   const positions = await traccar.positions(devices.map(d => d.positionId))
-  devices.forEach(d => { [d.position] = positions.find(p => p.deviceId === d.id) })
+  devices.forEach(d => { d.position = positions.find(p => p.deviceId === d.id) })
   return devices
 }
 
