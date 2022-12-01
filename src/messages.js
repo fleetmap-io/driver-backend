@@ -25,6 +25,7 @@ exports.post = async ({ body }, res) => {
       }
     }))
   } catch (e) {
+    console.error(e)
     res.status(500).end(e.message)
   }
 }
