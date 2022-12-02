@@ -14,7 +14,7 @@ exports.post = async ({ body }, res) => {
   console.log(body)
   await init
   try {
-    res.json(admin.messaging().send({
+    res.json(await admin.messaging().send({
       ...body,
       apns: {
         payload: {
