@@ -113,7 +113,7 @@ exports.startTrip = async (device) => {
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
   const data = 'setparam 11700:0'
-  console.log('deviceId', device.id, 'sending', data)
+  console.log('deviceId', device.id, device.attributes.deviceType, 'sending', data)
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data }, description: 'driver backend' })
   await sendSms(device.phone, '  ' + data)
   await sendSms(device.phone, '  getrecord')

@@ -1,4 +1,4 @@
-const CognitoExpress = require('cognito-express')
+const CognitoExpress = require('fleetmap-cognito-express')
 const express = require('express')
 const devices = require('./devices')
 const bodyParser = require('body-parser')
