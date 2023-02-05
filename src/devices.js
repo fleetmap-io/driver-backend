@@ -114,9 +114,18 @@ exports.startTrip = async (device) => {
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
   const data = 'setparam 11700:0'
   console.log('deviceId', device.id, device.attributes.deviceType, 'sending', data)
-  await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data }, description: 'driver backend' })
-  await sendSms(device.phone, '  ' + data)
-  await sendSms(device.phone, '  getrecord')
+  if (device.attributes.deviceType === 1) {
+    await sendSms(device.phone, '090005002008g')
+  } else {
+    await axios.post('commands/send', {
+      deviceId: device.id,
+      type: 'custom',
+      attributes: { data },
+      description: 'driver backend'
+    })
+    await sendSms(device.phone, '  ' + data)
+    await sendSms(device.phone, '  getrecord')
+  }
 }
 
 exports.endTrip = async (item) => {
