@@ -68,6 +68,7 @@ const getUser = (id) => dynamo.send(new GetItemCommand({
 
 const getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
+  console.log('getUser', user.username, _user)
   const cookie = await traccar.getUserCookie(_user.parentUserId)
   const devices = await traccar.devices(cookie)
   const positions = await traccar.positions(cookie)
