@@ -116,7 +116,9 @@ exports.startTrip = async (device) => {
   const data = 'setparam 11700:0'
   console.log('deviceId', device.id, device.attributes.deviceType, 'sending', data)
   if (device.attributes.deviceType === 1) {
-    await sendSms(device.phone, '090005002008g')
+    const sms = await axios.get('https://api.pinme.io/alblambda/smshelper/getdisablebuzzersms?deviceid=' + device.id
+    ).then(d => d.data)
+    await sendSms(device.phone, sms)
   } else {
     await axios.post('commands/send', {
       deviceId: device.id,

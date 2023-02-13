@@ -16,7 +16,8 @@ app.use(require('cors')())
 app.use(bodyParser.json())
 
 async function logTokenError (message, req) {
-  console.error(message, { ...parser(req.headers['user-agent']), ...(await getCity(req.headers['x-forwarded-for'].split(',')[0])) })
+  console.error(message, parser(req.headers['user-agent']).device,
+    (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
 }
 
 async function cogValidateToken (token, callback, retryCounter = 0) {
