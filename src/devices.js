@@ -113,17 +113,17 @@ async function sendSms (phone, message) {
 exports.startTrip = async (device) => {
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-  const data = 'setparam 11700:0'
-  console.log('deviceId', device.id, device.attributes.deviceType, 'sending', data)
   if (device.attributes.deviceType === 1) {
-    const sms = await axios.get('https://api.pinme.io/alblambda/smshelper/getdisablebuzzersms?deviceid=' + device.id
+    /* const sms = await axios.get('https://api.pinme.io/alblambda/smshelper/getdisablebuzzersms?deviceid=' + device.id
     ).then(d => d.data)
-    await sendSms(device.phone, sms)
+    await sendSms(device.phone, sms) */
     const tcp = await axios.get('https://api.pinme.io/alblambda/smshelper/getdisablebuzzertcp?deviceid=' + device.id
-      ).then(d => d.data)
+    ).then(d => d.data)
     const url = `https://api.pinme.io/alblambda/commands/send/uCQ3HxR5d87gvSRIPcjm/${device.uniqueId}>/${tcp}`
     console.log(url, await axios.get(url).then(d => d.data))
   } else {
+    const data = 'setparam 11700:0'
+    console.log('deviceId', device.id, device.attributes.deviceType, 'sending', data)
     await axios.post('commands/send', {
       deviceId: device.id,
       type: 'custom',
