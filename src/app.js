@@ -6,6 +6,8 @@ const orders = require('./orders')
 const users = require('./users')
 const parser = require('ua-parser-js')
 const axios = require('axios')
+const traccar = require('./traccar')
+const { getUser } = require('./users')
 
 let cognitoExpress
 
@@ -121,6 +123,19 @@ app.post('/endTrip', async (req, res) => {
 
 app.post('/messages', async (req, res) => {
   await require('./messages').post(req, res)
+})
+
+app.get('/session', async (req, res) => {
+  try {
+    const _user = await getUser(res.locals.user)
+    const cookie = await traccar.getUserCookie(_user.parentUserId)
+    res.set('Access-Control-Allow-Credentials', 'true')
+    res.set('Set-Cookie', cookie)
+    res.status(200).end()
+  } catch (e) {
+    console.error(e)
+    res.status(500).send(e.message)
+  }
 })
 
 module.exports = app
