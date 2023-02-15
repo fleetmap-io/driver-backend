@@ -119,7 +119,7 @@ exports.startTrip = async (device) => {
     await sendSms(device.phone, sms) */
     const tcp = await axios.get('https://api.pinme.io/alblambda/smshelper/getdisablebuzzertcp?deviceid=' + device.id
     ).then(d => d.data)
-    const url = `https://api.pinme.io/alblambda/commands/send/uCQ3HxR5d87gvSRIPcjm/${device.uniqueId}>/${tcp}`
+    const url = `https://api.pinme.io/alblambda/commands/send/uCQ3HxR5d87gvSRIPcjm/${device.uniqueId}/${tcp}`
     console.log(url, await axios.get(url).then(d => d.data))
   } else {
     const data = 'setparam 11700:0'
