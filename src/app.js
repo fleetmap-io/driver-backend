@@ -127,7 +127,7 @@ app.post('/messages', async (req, res) => {
 
 app.get('/session', async (req, res) => {
   try {
-    const _user = await getUser(res.locals.user)
+    const _user = await getUser(res.locals.user.usename)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
     res.set('Access-Control-Allow-Credentials', 'true')
     res.set('Set-Cookie', cookie)
