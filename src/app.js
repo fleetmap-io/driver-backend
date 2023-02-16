@@ -129,6 +129,7 @@ app.get('/session', async (req, res) => {
   try {
     const _user = await getUser(res.locals.user.username)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
+    console.log('cookie', cookie)
     res.set('Access-Control-Allow-Credentials', 'true')
     res.set('Set-Cookie', cookie)
     res.status(200).end()
