@@ -8,6 +8,7 @@ const parser = require('ua-parser-js')
 const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
+const { version } = require('../package.json')
 
 let cognitoExpress
 
@@ -50,6 +51,7 @@ function getCity (ip) {
 
 app.use(async function (req, res, next) {
   console.log(req.method, req.path)
+  res.set('x-version', version)
   if (req.path === '/messages') {
     next()
   } else {
