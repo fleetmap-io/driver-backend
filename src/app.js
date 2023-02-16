@@ -129,9 +129,8 @@ app.get('/session', async (req, res) => {
   try {
     const _user = await getUser(res.locals.user.username)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
-    console.log('cookie', cookie)
     res.set('Access-Control-Allow-Credentials', 'true')
-    res.set('Set-Cookie', cookie)
+    res.cookie('JSESSIONID', cookie.split(';')[0].split('=')[1], {path: '/', sameSite: 'none', secure: true})
     res.status(200).end()
   } catch (e) {
     console.error(e)
