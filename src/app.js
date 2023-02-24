@@ -141,7 +141,7 @@ app.get('/session', async (req, res) => {
 })
 
 app.get('/company', async (req, res) => {
-  res.json({sessionTimeout: 10000})
+  res.json({sessionTimeout: 15*60*1000})
 })
 
 module.exports = app
