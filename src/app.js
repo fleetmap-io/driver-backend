@@ -8,6 +8,7 @@ const parser = require('ua-parser-js')
 const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
+const { version } = require('../package.json')
 
 let cognitoExpress
 
@@ -50,6 +51,7 @@ function getCity (ip) {
 
 app.use(async function (req, res, next) {
   console.log(req.method, req.path)
+  res.set('x-version', version)
   if (req.path === '/messages') {
     next()
   } else {
@@ -127,15 +129,19 @@ app.post('/messages', async (req, res) => {
 
 app.get('/session', async (req, res) => {
   try {
-    const _user = await getUser(res.locals.user)
+    const _user = await getUser(res.locals.user.username)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
     res.set('Access-Control-Allow-Credentials', 'true')
-    res.set('Set-Cookie', cookie)
+    res.cookie('JSESSIONID', cookie.split(';')[0].split('=')[1], {path: '/', sameSite: 'none', secure: true})
     res.status(200).end()
   } catch (e) {
     console.error(e)
     res.status(500).send(e.message)
   }
+})
+
+app.get('/company', async (req, res) => {
+  res.json({sessionTimeout: 15*60*1000})
 })
 
 module.exports = app
