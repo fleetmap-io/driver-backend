@@ -23,7 +23,9 @@ exports.ignitionOffTimer = async () => {
     const m15 = 15 * 60 * 1000
     if (!dDevice.lastSmsSent ||
         (new Date(dDevice.ignitionOffDate).getTime() < new Date().getTime() - m15 &&
-          new Date(dDevice.lastSmsSent).getTime() < new Date().getTime() - m15)
+          new Date(dDevice.lastSmsSent).getTime() < new Date().getTime() - m15 &&
+            new Date(dDevice.ignitionOffDate).getTime() > new Date(dDevice.lastSmsSent).getTime()
+        )
     ) {
       const [device] = await admin.getDevicesById([dDevice.deviceId])
       const [position] = await admin.getPosition(device.positionId, device.id)
