@@ -51,6 +51,17 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+  ignitionOffTimer:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/timer.ignitionOffTimer
+      Runtime: nodejs14.x
+      Events:
+        Scheduled:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+
   driverUserTable:
     Type: AWS::Serverless::SimpleTable
     TableName: driverUser
