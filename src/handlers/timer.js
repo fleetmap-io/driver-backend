@@ -20,7 +20,11 @@ exports.ignitionOffTimer = async () => {
   const devices = await dynamo.send(new ScanCommand(command))
   for (const item of devices.Items) {
     const dDevice = unmarshall(item)
-    if (!dDevice.lastSmsSent || new Date(dDevice.lastSmsSent).getTime() < new Date().getTime() - 15 * 60 * 1000) {
+    const m15 = 15 * 60 * 1000
+    if (!dDevice.lastSmsSent ||
+        (new Date(dDevice.ignitionOffDate).getTime() < new Date().getTime() - m15 &&
+          new Date(dDevice.lastSmsSent).getTime() < new Date().getTime() - m15)
+    ) {
       const [device] = await admin.getDevicesById([dDevice.deviceId])
       const [position] = await admin.getPosition(device.positionId, device.id)
       if (!position.attributes.ignition) {
