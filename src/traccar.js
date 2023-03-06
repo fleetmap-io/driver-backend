@@ -15,6 +15,18 @@ exports.positions = async (cookie) => {
   return traccar.get('positions', { headers: { cookie } }).then(d => d.data)
 }
 
+exports.admin = {
+  async getDevicesById (deviceIds) {
+    const traccar = await getTraccar()
+    const url = '/devices?' + deviceIds.map(d => 'id=' + d).join('&')
+    return traccar.get(url).then(d => d.data)
+  },
+  async getPosition (positionId, deviceId) {
+    const traccar = await getTraccar()
+    return traccar.get(`/positions?id=${positionId}&deviceId=${deviceId}`).then(d => d.data)
+  }
+}
+
 const users = {
   async get (id) {
     const traccar = await getTraccar()
