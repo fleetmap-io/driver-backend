@@ -24,6 +24,10 @@ exports.admin = {
   async getPosition (positionId, deviceId) {
     const traccar = await getTraccar()
     return traccar.get(`/positions?id=${positionId}&deviceId=${deviceId}`).then(d => d.data)
+  },
+  async updateDevice (device) {
+    const traccar = await getTraccar()
+    return traccar.put('/devices/' + device.id, device).then(d => d.data)
   }
 }
 

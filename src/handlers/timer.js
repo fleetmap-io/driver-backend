@@ -34,12 +34,19 @@ exports.ignitionOffTimer = async () => {
             device.id).then(d => d.data)
         console.log('sending', sms, 'to', device.id)
         await sendSms(device.phone, sms)
-      } else { console.log('ignoring late ignition event', event.device.name, position) }
+      } else {
+        console.log('ignoring late ignition event', device.name, position)
+      }
       dDevice.lastSmsSent = new Date().getTime()
       await dynamo.send(new PutItemCommand({
         TableName: process.env.DEVICES_TABLE,
         Item: marshall(dDevice)
       }))
+      console.log('Logout driver', device.name, device.attributes.driverUniqueId)
+      if (device.attributes.driverUniqueId) {
+        delete device.attributes.driverUniqueId
+        await admin.updateDevice(device)
+      }
     } else {
       console.log(dDevice.deviceId, 'not enough time since last sms')
     }
