@@ -36,6 +36,7 @@ exports.ignitionOffTimer = async () => {
         await sendSms(device.phone, sms)
       } else {
         console.log('ignoring late ignition event', device.name, position)
+        return
       }
       dDevice.lastSmsSent = new Date().getTime()
       await dynamo.send(new PutItemCommand({
