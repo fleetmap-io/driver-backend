@@ -4,7 +4,7 @@ const { admin } = require('../traccar')
 const axios = require('axios')
 const { sendSms } = require('../sms')
 const dynamo = new DynamoDBClient({ region: 'us-east-1' })
-const deviceIds = require('deviceIds.json')
+const deviceIds = require('./deviceIds.json')
 console.log('using', deviceIds)
 const deviceIdsObject = {}
 let index = 0
