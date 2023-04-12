@@ -91,7 +91,7 @@ app.get('/', async (req, resp) => {
   try {
     resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
   } catch (e) {
-    console.error(e.message, e.response && e.response.data)
+    console.error(resp.locals.user, req.query, e.message, e.response && e.response.data)
     resp.status(500).send(e.message)
   }
 })
@@ -132,7 +132,7 @@ app.get('/session', async (req, res) => {
     const _user = await getUser(res.locals.user.username)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
     res.set('Access-Control-Allow-Credentials', 'true')
-    res.cookie('JSESSIONID', cookie.split(';')[0].split('=')[1], {path: '/', sameSite: 'none', secure: true})
+    res.cookie('JSESSIONID', cookie.split(';')[0].split('=')[1], { path: '/', sameSite: 'none', secure: true })
     res.status(200).end()
   } catch (e) {
     console.error(e)
@@ -141,7 +141,7 @@ app.get('/session', async (req, res) => {
 })
 
 app.get('/company', async (req, res) => {
-  res.json({sessionTimeout: 15*60*1000})
+  res.json({ sessionTimeout: 15 * 60 * 1000 })
 })
 
 module.exports = app
