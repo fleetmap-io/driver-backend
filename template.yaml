@@ -54,6 +54,7 @@ Resources:
   ignitionOffTimer:
     Type: AWS::Serverless::Function
     Properties:
+      Timeout: 10
       Handler: src/handlers/timer.ignitionOffTimer
       Runtime: nodejs14.x
       Policies:
