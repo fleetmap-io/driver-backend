@@ -18,40 +18,48 @@ exports.ignitionOffTimer = async () => {
     FilterExpression: 'deviceId IN (' + Object.keys(deviceIdsObject).toString() + ')',
     ExpressionAttributeValues: marshall(deviceIdsObject)
   }
-  const devices = await dynamo.send(new ScanCommand(command))
-  console.log('processing', devices.Items.length, 'from', deviceIds.length)
-  for (const item of devices.Items) {
-    const dDevice = unmarshall(item)
-    const m15 = 15 * 60 * 1000
-    if (!dDevice.lastSmsSent ||
-        (new Date(dDevice.ignitionOffDate).getTime() < new Date().getTime() - m15 &&
-          new Date(dDevice.lastSmsSent).getTime() < new Date().getTime() - m15 &&
-            new Date(dDevice.ignitionOffDate).getTime() > new Date(dDevice.lastSmsSent).getTime()
-        )
-    ) {
-      const [device] = await admin.getDevicesById([dDevice.deviceId])
-      const [position] = await admin.getPosition(device.positionId, device.id)
-      if (!position.attributes.ignition) {
-        const sms = await axios.get('https://api.pinme.io/alblambda/smshelper/getenablebuzzersms?deviceid=' +
-            device.id).then(d => d.data)
-        console.log('sending', sms, 'to', device.id)
-        await sendSms(device.phone, sms)
-      } else {
-        console.log('ignoring late ignition event', device.id, position)
-        return
-      }
-      dDevice.lastSmsSent = new Date().getTime()
-      await dynamo.send(new PutItemCommand({
-        TableName: process.env.DEVICES_TABLE,
-        Item: marshall(dDevice)
-      }))
-      console.log('Logout driver', device.name, device.attributes.driverUniqueId)
-      if (device.attributes.driverUniqueId) {
-        delete device.attributes.driverUniqueId
-        await admin.updateDevice(device)
-      }
-    } else {
-      console.log(dDevice.deviceId, 'not enough time since last sms')
+  console.log('processing', deviceIds.length)
+
+  let lastEvaluatedKey = null
+  do {
+    if (lastEvaluatedKey) {
+      command.ExclusiveStartKey = lastEvaluatedKey
     }
-  }
+    const devices = await dynamo.send(new ScanCommand(command))
+    for (const item of devices.Items) {
+      const dDevice = unmarshall(item)
+      const m15 = 15 * 60 * 1000
+      if (!dDevice.lastSmsSent ||
+            (new Date(dDevice.ignitionOffDate).getTime() < new Date().getTime() - m15 &&
+                new Date(dDevice.lastSmsSent).getTime() < new Date().getTime() - m15 &&
+                new Date(dDevice.ignitionOffDate).getTime() > new Date(dDevice.lastSmsSent).getTime()
+            )
+      ) {
+        const [device] = await admin.getDevicesById([dDevice.deviceId])
+        const [position] = await admin.getPosition(device.positionId, device.id)
+        if (!position.attributes.ignition) {
+          const sms = await axios.get('https://api.pinme.io/alblambda/smshelper/getenablebuzzersms?deviceid=' +
+                device.id).then(d => d.data)
+          console.log('sending', sms, 'to', device.id)
+          await sendSms(device.phone, sms)
+        } else {
+          console.log('ignoring late ignition event', device.id, position)
+          return
+        }
+        dDevice.lastSmsSent = new Date().getTime()
+        await dynamo.send(new PutItemCommand({
+          TableName: process.env.DEVICES_TABLE,
+          Item: marshall(dDevice)
+        }))
+        console.log('Logout driver', device.name, device.attributes.driverUniqueId)
+        if (device.attributes.driverUniqueId) {
+          delete device.attributes.driverUniqueId
+          await admin.updateDevice(device)
+        }
+      } else {
+        console.log(dDevice.deviceId, 'not enough time since last sms')
+      }
+    }
+    lastEvaluatedKey = devices.LastEvaluatedKey
+  } while (lastEvaluatedKey)
 }
