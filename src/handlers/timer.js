@@ -19,6 +19,7 @@ exports.ignitionOffTimer = async () => {
     ExpressionAttributeValues: marshall(deviceIdsObject)
   }
   const devices = await dynamo.send(new ScanCommand(command))
+  console.log('processing', devices.Items.length, 'from', deviceIds.length)
   for (const item of devices.Items) {
     const dDevice = unmarshall(item)
     const m15 = 15 * 60 * 1000
