@@ -37,7 +37,7 @@ exports.get = async (token, user, deviceId) => {
     const auth = await _secret
     const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
     const [device] = await axios.get(`devices?id=${deviceId}`).then(d => d.data)
-    device.attributes.driverUniqueId = user.username
+    device.attributes.driverAppUniqueId = user.username
     await axios.put(`devices/${device.id}`, device)
     const computed = await axios.get('attributes/computed?deviceId=' + device.id).then(d => d.data)
     if (!computed.find(a => a.id === 37)) {
@@ -136,9 +136,9 @@ exports.endTrip = async (item) => {
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
   const [device] = await axios.get('devices?id=' + item.id).then(d => d.data)
-  if (device.attributes.driverUniqueId) {
-    console.log('Logout driver', device.id, device.attributes.driverUniqueId)
-    delete device.attributes.driverUniqueId
+  if (device.attributes.driverAppUniqueId) {
+    console.log('Logout driver', device.id, device.attributes.driverAppUniqueId)
+    delete device.attributes.driverAppUniqueId
     await axios.put('devices/' + device.id, device)
   }
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setparam 11700:3' }, description: 'driver backend' })

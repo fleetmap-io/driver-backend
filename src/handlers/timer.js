@@ -44,9 +44,9 @@ exports.ignitionOffTimer = async () => {
         TableName: process.env.DEVICES_TABLE,
         Item: marshall(dDevice)
       }))
-      console.log('Logout driver', device.name, device.attributes.driverUniqueId)
-      if (device.attributes.driverUniqueId) {
-        delete device.attributes.driverUniqueId
+      console.log('Logout driver', device.name, device.attributes.driverAppUniqueId)
+      if (device.attributes.driverAppUniqueId) {
+        delete device.attributes.driverAppUniqueId
         await admin.updateDevice(device)
       }
     } else {
