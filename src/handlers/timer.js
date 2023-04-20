@@ -36,7 +36,7 @@ exports.ignitionOffTimer = async () => {
         console.log('sending', sms, 'to', device.id)
         await sendSms(device.phone, sms)
       } else {
-        console.log('ignoring late ignition event', device.name, position)
+        console.log('ignoring late ignition event', device.id, position)
         return
       }
       dDevice.lastSmsSent = new Date().getTime()
