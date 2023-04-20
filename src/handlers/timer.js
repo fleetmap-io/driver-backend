@@ -18,7 +18,7 @@ exports.ignitionOffTimer = async () => {
     FilterExpression: 'deviceId IN (' + Object.keys(deviceIdsObject).toString() + ')',
     ExpressionAttributeValues: marshall(deviceIdsObject)
   }
-  console.log('processing', deviceIds.length)
+  console.log('total devices', deviceIds.length)
 
   let lastEvaluatedKey = null
   do {
@@ -26,6 +26,8 @@ exports.ignitionOffTimer = async () => {
       command.ExclusiveStartKey = lastEvaluatedKey
     }
     const devices = await dynamo.send(new ScanCommand(command))
+    console.log(devices)
+    console.log('processing', devices.Items.length)
     for (const item of devices.Items) {
       const dDevice = unmarshall(item)
       const m15 = 15 * 60 * 1000
