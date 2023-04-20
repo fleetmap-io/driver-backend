@@ -26,7 +26,6 @@ exports.ignitionOffTimer = async () => {
       command.ExclusiveStartKey = lastEvaluatedKey
     }
     const devices = await dynamo.send(new ScanCommand(command))
-    console.log(devices)
     console.log('processing', devices.Items.length)
     for (const item of devices.Items) {
       const dDevice = unmarshall(item)
@@ -46,7 +45,7 @@ exports.ignitionOffTimer = async () => {
           await sendSms(device.phone, sms)
         } else {
           console.log('ignoring late ignition event', device.id, position)
-          return
+          continue
         }
         dDevice.lastSmsSent = new Date().getTime()
         await dynamo.send(new PutItemCommand({
