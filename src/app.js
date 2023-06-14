@@ -128,14 +128,15 @@ app.post('/messages', async (req, res) => {
 })
 
 app.get('/session', async (req, res) => {
+  let _user
   try {
-    const _user = await getUser(res.locals.user.username)
+    _user = await getUser(res.locals.user.username)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
     res.set('Access-Control-Allow-Credentials', 'true')
     res.cookie('JSESSIONID', cookie.split(';')[0].split('=')[1], { path: '/', sameSite: 'none', secure: true })
     res.json(cookie)
   } catch (e) {
-    console.error(e)
+    console.error('/session', _user, e)
     res.status(500).send(e.message)
   }
 })
