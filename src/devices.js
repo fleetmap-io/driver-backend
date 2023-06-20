@@ -65,12 +65,14 @@ exports.get = async (token, user, deviceId) => {
 
 const getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
-  console.log('getUser', user.username, _user)
+  console.log('user', user.username, _user)
   const cookie = await traccar.getUserCookie(_user.parentUserId)
   try {
     const drivers = await traccar.get(cookie, 'drivers')
     const driver = drivers.find(d => d.uniqueId.toLowerCase() === user.username.toLowerCase())
-    console.log(driver, drivers)
+    console.log('driver', driver)
+    const groups = await traccar.get(cookie, 'groups')
+    console.log(groups)
   } catch (e) {
     console.error(e)
   }
