@@ -67,6 +67,13 @@ const getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
   console.log('getUser', user.username, _user)
   const cookie = await traccar.getUserCookie(_user.parentUserId)
+  try {
+    const drivers = await traccar.get(cookie, 'drivers')
+    const driver = drivers.filter(d => d.uniqueId === user.username)
+    console.log(drivers, driver)
+  } catch (e) {
+    console.error(e)
+  }
   const devices = await traccar.devices(cookie)
   const positions = await traccar.positions(cookie)
   devices.forEach(d => { d.position = positions.find(p => p.deviceId === d.id) })

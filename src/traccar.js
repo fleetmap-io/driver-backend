@@ -11,6 +11,10 @@ exports.devices = async (cookie) => {
   return traccar.get('devices', { headers: { cookie } }).then(d => d.data)
 }
 
+exports.get = async (cookie, url) => {
+  return traccar.get(url, { headers: { cookie } }).then(d => d.data)
+}
+
 exports.positions = async (cookie) => {
   return traccar.get('positions', { headers: { cookie } }).then(d => d.data)
 }
