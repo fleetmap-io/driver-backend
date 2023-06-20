@@ -69,7 +69,7 @@ const getDevicesAndPositions = async (user) => {
   const cookie = await traccar.getUserCookie(_user.parentUserId)
   try {
     const drivers = await traccar.get(cookie, 'drivers')
-    const driver = drivers.filter(d => d.uniqueId.toLowerCase() === user.username.toLowerCase())
+    const driver = drivers.find(d => d.uniqueId.toLowerCase() === user.username.toLowerCase())
     console.log(driver, drivers)
   } catch (e) {
     console.error(e)
