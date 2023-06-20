@@ -67,19 +67,25 @@ const getDevicesAndPositions = async (user) => {
   const _user = await getUser(user.username)
   console.log('user', user.username, _user)
   const cookie = await traccar.getUserCookie(_user.parentUserId)
-  try {
-    const drivers = await traccar.get(cookie, 'drivers')
+  const result = []
+  const groups = await traccar.get(cookie, 'groups')
+  const devices = await traccar.get(cookie, 'devices')
+  for (const g of groups) {
+    const drivers = await traccar.get(cookie, 'drivers?groupId=' + g.id)
     const driver = drivers.find(d => d.uniqueId.toLowerCase() === user.username.toLowerCase())
-    console.log('driver', driver)
-    const groups = await traccar.get(cookie, 'groups')
-    console.log(groups)
-  } catch (e) {
-    console.error(e)
+    if (driver) {
+      devices.filter(d => d.groupId === g.id).forEach(d => {
+        //no duplicates
+        if (!result.find(r => d.id===r.id)) {
+          result.push(d)
+        }
+      })
+    }
   }
-  const devices = await traccar.devices(cookie)
   const positions = await traccar.positions(cookie)
-  devices.forEach(d => { d.position = positions.find(p => p.deviceId === d.id) })
-  return devices
+  result.forEach(d => { d.position = positions.find(p => p.deviceId === d.id) })
+  console.log('returning', result.length)
+  return result
 }
 
 exports.devicesGet = async (req, resp) => {
