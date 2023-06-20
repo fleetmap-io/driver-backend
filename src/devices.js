@@ -74,12 +74,8 @@ const getDevicesAndPositions = async (user) => {
     const drivers = await traccar.get(cookie, 'drivers?groupId=' + g.id)
     const driver = drivers.find(d => d.uniqueId.toLowerCase() === user.username.toLowerCase())
     if (driver) {
-      devices.filter(d => d.groupId === g.id).forEach(d => {
-        //no duplicates
-        if (!result.find(r => d.id===r.id)) {
-          result.push(d)
-        }
-      })
+      const filtered = devices.filter(d => d.groupId === g.id)
+      result.push(...filtered)
     }
   }
   const positions = await traccar.positions(cookie)
