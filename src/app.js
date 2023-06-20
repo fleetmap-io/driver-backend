@@ -23,6 +23,16 @@ async function logTokenError (message, req) {
     (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
 }
 
+async function logError (e, req, ...args) {
+  try {
+    console.error(...args, e.message,
+        (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+
 async function cogValidateToken (token, callback, retryCounter = 0) {
   if (!cognitoExpress) {
     cognitoExpress = new CognitoExpress({
@@ -128,14 +138,15 @@ app.post('/messages', async (req, res) => {
 })
 
 app.get('/session', async (req, res) => {
+  let _user
   try {
-    const _user = await getUser(res.locals.user.username)
+    _user = await getUser(res.locals.user.username)
     const cookie = await traccar.getUserCookie(_user.parentUserId)
     res.set('Access-Control-Allow-Credentials', 'true')
     res.cookie('JSESSIONID', cookie.split(';')[0].split('=')[1], { path: '/', sameSite: 'none', secure: true })
-    res.status(200).end()
+    res.json(cookie)
   } catch (e) {
-    console.error(e)
+    await logError(e, req, '/session', _user)
     res.status(500).send(e.message)
   }
 })
