@@ -60,7 +60,7 @@ function getCity (ip) {
 }
 
 app.use(async function (req, res, next) {
-  console.log(req.method, req.path)
+  console.log(req.method, req.path, req.query)
   res.set('x-version', version)
   if (req.path === '/messages') {
     next()
