@@ -4,4 +4,4 @@ process.env.DRIVER_USER_TABLE = 'driver-backend-driverUserTable-WO9H2QY2KTV8'
 
 const devices = require('../../src/devices')
 devices.devicesGet(undefined,
-  { locals: { user: { username: 'l.jopia' } }, json: (j) => console.log(j) }).then(r => console.log(r))
+  { locals: { user: { username: 'ajimenez' } }, json: (j) => console.log(j) }).then(r => console.log(r))
