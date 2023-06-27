@@ -105,11 +105,10 @@ exports.mobilize = async (device) => {
   await axios.post('commands/send', { deviceId: device.id, type: 'custom', attributes: { data: 'setdigout 0' }, description: 'driver backend' })
 }
 
-exports.positions = async (positionId, user) => {
-  console.log(user && user.username, 'checking position id', positionId)
+exports.positions = async (deviceId, positionId) => {
   const auth = await _secret
   const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-  return axios.get('positions?id=' + positionId).then(d => d.data)
+  return axios.get(`positions?id=${positionId}&deviceId=${deviceId}`).then(d => d.data)
 }
 
 async function sendSms (phone, message) {
