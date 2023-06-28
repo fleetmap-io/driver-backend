@@ -26,11 +26,14 @@ async function logTokenError (message, req) {
 async function logError (e, req, ...args) {
   try {
     console.error(...args, e.message,
+        e.response && e.response.data, (e.config && e.config.url) || e,
         (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
   } catch (e) {
     console.error(e)
   }
 }
+
+exports.logError = logError
 
 
 async function cogValidateToken (token, callback, retryCounter = 0) {
