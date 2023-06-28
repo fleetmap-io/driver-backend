@@ -5,11 +5,10 @@ const bodyParser = require('body-parser')
 const orders = require('./orders')
 const users = require('./users')
 const parser = require('ua-parser-js')
-const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
 const { version } = require('../package.json')
-const { logError } = require('./utils')
+const { logError, getCity } = require('./utils')
 
 let cognitoExpress
 
@@ -44,10 +43,6 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
     }
     throw e
   }
-}
-
-function getCity (ip) {
-  return axios.get(`https://ipinfo.io/${ip}?token=${process.env.IPINFO_TOKEN}`).then(d => d.data)
 }
 
 app.use(async function (req, res, next) {
