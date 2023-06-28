@@ -9,7 +9,7 @@ const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
 const { version } = require('../package.json')
-const {logError} = require("./utils");
+const { logError } = require('./utils')
 
 let cognitoExpress
 
@@ -23,7 +23,6 @@ async function logTokenError (message, req) {
   console.error(message, parser(req.headers['user-agent']).device,
     (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
 }
-
 
 async function cogValidateToken (token, callback, retryCounter = 0) {
   if (!cognitoExpress) {
