@@ -110,7 +110,7 @@ app.get('/devices', devices.devicesGet)
 
 app.get('/positions', async (req, resp) => {
   try {
-    resp.json(await devices.positions(req.query.deviceId, req.query.id))
+    resp.json(await devices.positions(req.query.deviceId, resp.locals.user))
   } catch (e) {
     console.error(e.message, e.response && e.response.data)
     resp.status(500).send(e.message)
