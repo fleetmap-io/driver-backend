@@ -9,6 +9,7 @@ const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
 const { version } = require('../package.json')
+const {logError} = require("./utils");
 
 let cognitoExpress
 
@@ -22,18 +23,6 @@ async function logTokenError (message, req) {
   console.error(message, parser(req.headers['user-agent']).device,
     (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
 }
-
-async function logError (e, req, ...args) {
-  try {
-    console.error(...args, e.message,
-        e.response && e.response.data, (e.config && e.config.url) || e,
-        (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-exports.logError = logError
 
 
 async function cogValidateToken (token, callback, retryCounter = 0) {

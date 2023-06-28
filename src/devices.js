@@ -7,7 +7,7 @@ const { unmarshall, marshall } = require('@aws-sdk/util-dynamodb')
 const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
-const {logError} = require("./app");
+const {logError} = require("./utils");
 
 exports.getUsers = async (user) => {
   const _user = await dynamo.send(new GetItemCommand({
@@ -89,7 +89,7 @@ exports.devicesGet = async (req, resp) => {
   try {
     resp.json(await getDevicesAndPositions(resp.locals.user))
   } catch (e) {
-    await logError(e, 'getDevicesAndPositions')
+    await logError(e, req,'getDevicesAndPositions')
     resp.status(500).send(e.message)
   }
 }
