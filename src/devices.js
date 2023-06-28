@@ -109,8 +109,7 @@ exports.positions = async (deviceId, user) => {
   const _user = await getUser(user.username)
   const cookie = await traccar.getUserCookie(_user.parentUserId)
   const positions = await traccar.positions(cookie)
-  console.log('positions', positions)
-  return positions.filter(p => p.deviceId === deviceId)
+  return positions.filter(p => p.deviceId === parseInt(deviceId))
 }
 
 async function sendSms (phone, message) {
