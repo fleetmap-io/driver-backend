@@ -87,7 +87,7 @@ app.get('/', async (req, resp) => {
   try {
     resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
   } catch (e) {
-    console.error(resp.locals.user, req.query, e.message, e.response && e.response.data)
+    await logError(e, req, resp.locals.user && resp.locals.user.username)
     resp.status(500).send(e.message)
   }
 })
