@@ -19,7 +19,7 @@ app.use(require('cors')())
 app.use(bodyParser.json())
 
 async function logTokenError (message, req) {
-  console.error(message, parser(req.headers['user-agent']).device,
+  console.warn(message, parser(req.headers['user-agent']).device,
     (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
 }
 
