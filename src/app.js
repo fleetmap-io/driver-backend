@@ -44,6 +44,14 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
     throw e
   }
 }
+async function processRequest(method, req, res, ...args) {
+  try {
+    res.json(await method(...args))
+  } catch (e) {
+    await logError(e, req, res.locals.user && res.locals.user.username)
+    res.status(500).send(e.message)
+  }
+}
 
 app.use(async function (req, res, next) {
   console.log(req.method, req.path, req.query)
@@ -80,7 +88,7 @@ app.post('/addPhoto', async (req, res) => {
 })
 
 app.get('/users', async (req, resp) => {
-  resp.json(await devices.getUsers(resp.locals.user))
+  await processRequest(devices.getUsers, req, resp, resp.locals.user)
 })
 
 app.get('/', async (req, resp) => {
