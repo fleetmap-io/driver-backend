@@ -5,10 +5,10 @@ const bodyParser = require('body-parser')
 const orders = require('./orders')
 const users = require('./users')
 const parser = require('ua-parser-js')
-const axios = require('axios')
 const traccar = require('./traccar')
 const { getUser } = require('./users')
 const { version } = require('../package.json')
+const { logError, getCity } = require('./utils')
 
 let cognitoExpress
 
@@ -19,19 +19,9 @@ app.use(require('cors')({ origin: true}))
 app.use(bodyParser.json())
 
 async function logTokenError (message, req) {
-  console.error(message, parser(req.headers['user-agent']).device,
+  console.warn(message, parser(req.headers['user-agent']).device,
     (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
 }
-
-async function logError (e, req, ...args) {
-  try {
-    console.error(...args, e.message,
-        (await getCity(req.headers['x-forwarded-for'].split(',')[0])).region)
-  } catch (e) {
-    console.error(e)
-  }
-}
-
 
 async function cogValidateToken (token, callback, retryCounter = 0) {
   if (!cognitoExpress) {
@@ -55,12 +45,8 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
   }
 }
 
-function getCity (ip) {
-  return axios.get(`https://ipinfo.io/${ip}?token=${process.env.IPINFO_TOKEN}`).then(d => d.data)
-}
-
 app.use(async function (req, res, next) {
-  console.log(req.method, req.path)
+  console.log(req.method, req.path, req.query)
   res.set('x-version', version)
   if (req.path === '/messages') {
     next()
@@ -101,7 +87,7 @@ app.get('/', async (req, resp) => {
   try {
     resp.json(await devices.get(req.query.token, resp.locals.user, req.query.id))
   } catch (e) {
-    console.error(resp.locals.user, req.query, e.message, e.response && e.response.data)
+    await logError(e, req, resp.locals.user && resp.locals.user.username)
     resp.status(500).send(e.message)
   }
 })
@@ -110,7 +96,7 @@ app.get('/devices', devices.devicesGet)
 
 app.get('/positions', async (req, resp) => {
   try {
-    resp.json(await devices.positions(req.query.id, resp.locals.user))
+    resp.json(await devices.positions(req.query.deviceId, resp.locals.user))
   } catch (e) {
     console.error(e.message, e.response && e.response.data)
     resp.status(500).send(e.message)
