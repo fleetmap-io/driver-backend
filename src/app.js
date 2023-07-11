@@ -103,7 +103,7 @@ app.get('/', async (req, resp) => {
 app.get('/devices', devices.devicesGet)
 
 app.get('/positions', async (req, resp) => {
-  await processRequest(devices.positions, req, resp, req.query.deviceId, resp.locals.user)
+  await processRequest(devices.positions, req, resp, req.query.id, resp.locals.user)
 })
 
 app.post('/immobilize', async (req, res) => {
