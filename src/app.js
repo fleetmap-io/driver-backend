@@ -15,7 +15,7 @@ let cognitoExpress
 // eslint-disable-next-line new-cap
 const app = new express()
 // noinspection JSCheckFunctionSignatures
-app.use(require('cors')({ origin: true}))
+app.use(require('cors')())
 app.use(bodyParser.json())
 
 async function logTokenError (message, req) {
