@@ -54,7 +54,7 @@ async function processRequest(method, req, res, ...args) {
 }
 
 app.use(async function (req, res, next) {
-  console.log(req.method, req.path, req.query)
+  console.log(req.method, req.path, req.query, req.body)
   res.set('x-version', version)
   if (req.path === '/messages') {
     next()
@@ -123,7 +123,7 @@ app.post('/endTrip', async (req, res) => {
 })
 
 app.post('/messages', async (req, res) => {
-  await require('./messages').post(req, res)
+  await processRequest(require('./messages').post, req, res, req, res)
 })
 
 app.get('/session', async (req, res) => {

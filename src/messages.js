@@ -11,7 +11,6 @@ const init = secrets.getSecret('firebaseDriverKey')
   ).catch(e => console.error(e))
 
 exports.post = async ({ body }, res) => {
-  console.log(body)
   await init
   try {
     res.json(await admin.messaging().send({
