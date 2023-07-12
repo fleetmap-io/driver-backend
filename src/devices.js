@@ -107,10 +107,10 @@ exports.mobilize = async (device) => {
 }
 
 exports.positions = async (positionId, user) => {
-  console.log(user && user.username, 'checking position id', positionId)
-  const auth = await _secret
-  const axios = require('axios').create({ auth, baseURL: auth.baseUrl })
-  return axios.get('positions?id=' + positionId).then(d => d.data)
+  const _user = await getUser(user.username)
+  const cookie = await traccar.getUserCookie(_user.parentUserId)
+  const positions = await traccar.positions(cookie)
+  return positions.filter(p => p.id === parseInt(positionId))
 }
 
 async function sendSms (phone, message) {
