@@ -44,7 +44,7 @@ async function cogValidateToken (token, callback, retryCounter = 0) {
     throw e
   }
 }
-async function processRequest(method, req, res, ...args) {
+async function processRequest (method, req, res, ...args) {
   try {
     res.json(await method(...args))
   } catch (e) {
@@ -54,7 +54,7 @@ async function processRequest(method, req, res, ...args) {
 }
 
 app.use(async function (req, res, next) {
-  console.log(req.method, req.path, req.query, req.body)
+  console.log(req.method, req.hostname, req.path, req.query, req.body)
   res.set('x-version', version)
   if (req.path === '/messages') {
     next()
