@@ -54,7 +54,7 @@ async function processRequest (method, req, res, ...args) {
 }
 
 app.use(async function (req, res, next) {
-  console.log(req.method, req.headers['x-forwarded-host'], req.path, req.query, req.body)
+  console.log(req.method, req.headers, req.path, req.query, req.body)
   res.set('x-version', version)
   if (req.path === '/messages') {
     next()
